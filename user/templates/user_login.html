@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section id="login" class='about'>
+    <div class="section-header">
+        <h2>로그인</h2>
+    </div>
+    <form action="{% url 'User:login' %}" method='post' id='loginform' style='padding-left: 20%;padding-right:20%;' class='d-grid gap-2'>
+        {% csrf_token %}
+        {% include "includes/partial_user_form.html" %}
+        <div class="d-grid mt-4">
+            <button type='submit' class='btn btn-primary'>로그인</a>
+        </div>
+    </form>
+</section>
+{% endblock  %}

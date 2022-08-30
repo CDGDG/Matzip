@@ -1,0 +1,41 @@
+<h4 class="comments-count">리뷰 {{object_count}} 개</h4>
+<select name="comment_orderby" id="comment-order-select" class="form-control w-25" style="float:right;">
+    <option {% if orderby == "-datetime" %}selected{% endif %} value="-datetime">최신순</option>
+    <option {% if orderby == "datetime" %}selected{% endif %} value="datetime">오래된순</option>
+    <option {% if orderby == "-rating" %}selected{% endif %} value="-rating">별점높은순</option>
+    <option {% if orderby == "rating" %}selected{% endif %} value="rating">별점낮은순</option>
+</select>
+{% for co in comments %}
+<div class="comment">
+    <div class="d-flex">
+        <div class="w-100">
+            <i class="bi bi-star-fill" style='color: {% if co.rating > 0 %} #ffc107 {% else %} lightgray {% endif %}'></i>
+            <i class="bi bi-star-fill" style='color: {% if co.rating > 1 %} #ffc107 {% else %} lightgray {% endif %}'></i>
+            <i class="bi bi-star-fill" style='color: {% if co.rating > 2 %} #ffc107 {% else %} lightgray {% endif %}'></i>
+            <i class="bi bi-star-fill" style='color: {% if co.rating > 3 %} #ffc107 {% else %} lightgray {% endif %}'></i>
+            <i class="bi bi-star-fill" style='color: {% if co.rating > 4 %} #ffc107 {% else %} lightgray {% endif %}'></i>
+            <h5>
+                {{co.user.username}}
+                {% if request.user == co.user %}
+                <a href="#" class="reply js-update-btn" data-url="{% url 'Comment:update' co.pk %}">수정</a>
+                <a href="#" class="reply js-delete-btn" delete-num="{{co.pk}}">삭제</a>
+                <form action="{% url 'Comment:delete' co.pk %}" method="post" class="comment-delete-form" delete-num="{{co.pk}}">
+                    {% csrf_token %}
+                </form>
+                {% endif %}
+            </h5>
+            <time datetime="{{co.datetime}}">{{co.datetime}}</time>
+            <div class="row">
+                {% for commentimage in co.coim.all %}
+                <img src="{{commentimage.image}}" alt="" class="col-lg-4 rounded-2 mb-2" style="object-fit:contain;height:300px;">
+                {% endfor %}
+            </div>
+            <p>{{co.text}}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="blog-pagination">
+    {% include "comment/includes/partial_comment_paging.html" %}
+</div>

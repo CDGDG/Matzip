@@ -1,0 +1,17 @@
+{% for rs in restaurant_list %}
+<div class="col-lg-4 col-md-6">
+    <div class="service-item  position-relative">
+      <div>
+        <h4>{% if rs.avg_rate %}{{rs.avg_rate}}{% else %}0{% endif %} / 5</h4>
+      </div>
+      <h3>{{rs.name}}</h3>
+      <h4 style="font-size: 14px;color:#999;">{{rs.type}}</h4>
+      {% if rs.address != "nan" %}
+      <p>{{rs.address}}</p>
+      {% endif %}
+      <a href="{% url 'Matzip:detail' rs.id %}" class="readmore stretched-link">자세히 보기 <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </div>
+{% empty %}
+<div class='text-center'><strong>No data...</strong></div>
+{% endfor %}

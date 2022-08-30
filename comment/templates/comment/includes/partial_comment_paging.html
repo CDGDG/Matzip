@@ -1,0 +1,15 @@
+<ul class="justify-content-center">
+
+    {% for index in pagelist %}
+    {% if index == comments.number %}
+    <li class="active">
+        <a class="page-link">{{ index }}</a>
+    </li>
+    {% else %}
+    <li>
+        <a class="page-link pagelink" data-page="{{ index }}" orderby="{{ orderby }}">{{ index }}</a>
+    </li>
+    {% endif %}
+    {% endfor %}
+
+</ul>

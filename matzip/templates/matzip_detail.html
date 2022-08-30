@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{object.name}}{% endblock  %}
+
+{% block content %}
+<div class="breadcrumbs">
+    <div class="page-header d-flex align-items-center" style="background-image: url('');">
+      <div class="container position-relative">
+        <div class="row d-flex justify-content-center">
+          <div class="col-lg-6 text-center">
+            <h2>{{object.name}}</h2>
+            <h4 style="color:#CCC;">{{object.type}}</h4>
+            <p>{{object.address}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<section class='blog'>
+    <div class="container aos-init aos-animate" data-aos="fade-up">
+        <div class="row g-5">
+            <!-- 정보-->
+            <div class="col-lg-6">
+                <article class='blog-details'>
+                    <div class="post-img">
+                        <div id="map" style='height:400px;'></div>
+                    </div>
+                    <h2 class='text-center'>
+                        <div class='position-relative' style='width: 300px; height: 50px;margin: 0 auto;'>
+                            <img src="{% static 'assets/img/five-star-img.png' %}" alt="{{avg_rate}} / 5" class='w-100 position-absolute' style="left: -{{star_position}}px; object-position: {{star_position}}px;">
+                        </div>
+                    </h2>
+                    <h2 class="text-center mb-2">{{avg_rate}} / 5</h2>
+                    <h2 class='title text-center mb-3'>{{object.name}}</h2>
+                    {% if object.phone %}
+                    <p class='text-center'>📞 {{object.phone}}</p>
+                    {% endif %}
+
+                    {% if request.user == object.user %}
+                    <button class="btn btn-primary float-end" id="matzip-delete-btn">삭제하기</button>
+                    <form action="{% url 'Matzip:delete' object.id %}" method="post" id='matzip-delete-form'>{% csrf_token %}</form>
+                    <button class="btn btn-primary float-end me-2" id="matzip-update-btn" data-url="{% url 'Matzip:update' object.id %}">수정하기</button>
+                    {% endif %}
+                    <div class="clearfix"></div>
+                </article>
+
+                <article class="blog-details mt-4 text-center">
+                    <h2 class="title">Star Count</h2>
+                    <img src="{{pie_image}}" alt="pie" class="w-100 img-fluid rounded-4 mt-2" style="background-color:#333;">
+                </article>
+                
+                <article class="blog-details mt-4 text-center">
+                    <h2 class="title">날짜별 별점</h2>
+                    <img src="{{day_image}}" alt="pie" class="w-100 img-fluid rounded-4 mt-2" style="background-color:var(--color-primary);">
+                </article>
+            </div>
+
+            <!-- 댓글 -->
+            <div class="col-lg-6">
+                <div class="sidebar">
+                    <div class="sidebar-item reply-form">
+                        <h4>리뷰 남기기</h4>
+                        <input type="hidden" id="object_pk" value="{{object.pk}}">
+                        <form action="{% url 'Comment:create' object.pk %}" method="post" id='comment-create-form'>
+                            {% csrf_token %}
+                            {% include "comment/includes/partial_comment_form.html" %}
+                            <button type="submit" class='btn btn-primary mt-2' style="border-radius: 50px; padding: 14px 40px;border:0;background-color: var(--color-secondary);">확인</button>
+                        </form>
+                    </div>
+                    <div class="comments">
+                        <div id='comments_div'>
+                            {% include "comment/includes/partial_comment_list.html" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock  %}
+
+{% block script %}
+<script src="/static/assets/js/jquery.dropotron.min.js"></script>
+<script>
+    const address = "{{object.address}}"
+    const name = "{{object.name}}"
+    
+</script>
+<script src="{% static 'assets/js/script_matzip_detail_map.js' %}"></script>
+<script src="{% static 'assets/js/script_comment.js' %}"></script>
+<link rel="stylesheet" href="{% static 'assets/css/stars.css' %}">
+{% endblock  %}

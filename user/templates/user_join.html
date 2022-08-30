@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section id="join" class='about'>
+    <div class="section-header">
+        <h2>회원가입</h2>
+    </div>
+    <form action="{% url 'User:join' %}" method='post' id='joinform' style='padding-left: 20%;padding-right:20%;' class='d-grid gap-2'>
+        {% csrf_token %}
+        <div id="joinfield">
+            {% include "includes/partial_user_form.html" %}
+        </div>
+        <div class="d-grid gap-2 mt-4">
+            <button type='submit' class='btn btn-primary' >회원가입</button>
+            <a href="{% url 'User:login' %}" class='btn btn-secondary'>로그인</a>
+        </div>
+    </form>
+</section>
+{% endblock  %}

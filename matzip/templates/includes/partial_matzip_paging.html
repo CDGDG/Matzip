@@ -1,0 +1,21 @@
+<ul class="justify-content-center">
+
+    {% for index in pagelist %}
+    {% if index == page_obj.number %}
+    <li class="active">
+        <a class="page-link">{{ index }}</a>
+    </li>
+    {% else %}
+        {% if index == "..." %}
+        <li>
+            <a class="page-link">{{ index }}</a>
+        </li>
+        {% else %}
+        <li>
+            <a class="page-link" href="?page={{ index }}&address={{currentPosition}}&orderby={{orderby}}&type={{type}}">{{ index }}</a>
+        </li>
+        {% endif %}
+    {% endif %}
+    {% endfor %}
+
+</ul>

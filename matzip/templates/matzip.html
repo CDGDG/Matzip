@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}맛집리스트{% endblock  %}
+
+{% block content %}
+<section id='matzips' class='services sections-bg'>
+    <div class="container aos-init aos-animate blog" data-aos="fade-up">
+        <div class="section-header">
+            <h2>맛<span style='color:#f96f59;'>.</span>zip 리스트</h2>
+            <h3><a href="#" id="region-select-btn">{% if currentPosition %}{{currentPosition}}{% else %}전체{% endif %}</a></h3>
+        </div>
+        
+        <div class='hero' style='background:none;padding:0;margin:0;'>
+            <button id="matzip-create-btn" class='btn-get-started' data-url="{% url 'Matzip:create' %}" style='background-color: var(--color-primary);'>등록하기</button>
+            <select name="matzip-order" id="matzip-order-select" class="form-control d-inline-block" style="width: 10%;float:right;" data-url="{% url 'Matzip:list' %}?address={{currentPosition}}&type={{type}}&orderby=">
+                <option value="name" {% if orderby == "name" %}selected{% endif %}>이름순</option>
+                <option value="-avg_rate" {% if orderby == "-avg_rate" %}selected{% endif %}>별점 높은순</option>
+                <option value="avg_rate" {% if orderby == "avg_rate" %}selected{% endif %}>별점 낮은순</option>
+            </select>            
+            <div class="d-inline-block me-4 rounded-2" style="width:fit-content;float: right;border: 2px solid var(--color-primary);">
+                <input {% if type == "" %}checked{% endif %} type="radio" name="matzip-type" class="d-none" data-url="{% url 'Matzip:list' %}?address={{currentPosition}}&orderby={{orderby}}&type=" value="" id="id_type_total"><label for="id_type_total" class="p-2">전체</label>
+                <input {% if type == "한식" %}checked{% endif %} type="radio" name="matzip-type" class="d-none" data-url="{% url 'Matzip:list' %}?address={{currentPosition}}&orderby={{orderby}}&type=" value="한식" id="id_type_kr"><label for="id_type_kr" class="p-2">한식</label>
+                <input {% if type == "중식" %}checked{% endif %} type="radio" name="matzip-type" class="d-none" data-url="{% url 'Matzip:list' %}?address={{currentPosition}}&orderby={{orderby}}&type=" value="중식" id="id_type_ch"><label for="id_type_ch" class="p-2">중식</label>
+                <input {% if type == "일식" %}checked{% endif %} type="radio" name="matzip-type" class="d-none" data-url="{% url 'Matzip:list' %}?address={{currentPosition}}&orderby={{orderby}}&type=" value="일식" id="id_type_jp"><label for="id_type_jp" class="p-2">일식</label>
+                <input {% if type == "양식" %}checked{% endif %} type="radio" name="matzip-type" class="d-none" data-url="{% url 'Matzip:list' %}?address={{currentPosition}}&orderby={{orderby}}&type=" value="양식" id="id_type_we"><label for="id_type_we" class="p-2">양식</label>
+            </div>
+        </div>
+
+        <div class="row gy-4 aos-init aos-animate mt-4" data-aos="fade-up" data-aos-delay="100">
+            
+            {% include "includes/partial_matzip_list.html" %}
+            
+        </div>
+
+        <div class="blog-pagination">
+            {% include "includes/partial_matzip_paging.html" %}
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="modal-position">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div style="background-color:white; padding: 10%; border-radius: 20px;" class="d-flex">
+                <div class="col-lg-12">
+                    <label for="id_si" class="p-2" style="white-space:nowrap;font-weight:bold;">시/도</label>
+                    <select name="si" id="id_si" class='form-control'>
+                        <option value="">전체</option>
+                        {% for reg, _ in regions.items %}
+                        <option value="{{reg}}">{{reg}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="id_si" class="p-2" style="white-space:nowrap;font-weight:bold;">구/시</label>
+                    <select name="gu" id="id_gu" class="form-control">
+                        <option value="">전체</option>
+                        {% for si, list in regions.items %}
+                        {% for reg in list %}
+                        <option value="{{reg}}" si="{{si}}" class="d-none op">{{reg}}</option>
+                        {% endfor %}
+                        {% endfor %}
+                    </select>
+                    <button id="region-change-btn" class="btn w-100 mt-4 text-white p-2" data-url="{% url 'Matzip:list' %}?orderby={{orderby}}&address="
+                    style="background-color: var(--color-primary);font-family: var(--font-primary);border-color:rgba(255, 255, 255, 0.5);">지역 변경</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}
+
+{% block script %}
+<script src="{% static 'assets/js/script_sigu.js' %}"></script>
+<link rel="stylesheet" href="{% static 'assets/css/matzip.css' %}">
+{% endblock  %}
