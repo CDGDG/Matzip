@@ -13,10 +13,10 @@ services:
   web:
     build: .
     command: bash -c "
-      python3 ./manage.py collectstatic --no-input &&
-      python3 ./manage.py makemigrations &&
-      python3 ./manage.py migrate &&
-      gunicorn ./config.wsgi:application -b 0:80"
+      python3 /src/manage.py collectstatic --no-input &&
+      python3 /src/manage.py makemigrations &&
+      python3 /src/manage.py migrate &&
+      gunicorn /src/config.wsgi:application -b 0:80"
     volumes:
       - .:/src
       - ./config/gunicorn:/etc/systemd/system

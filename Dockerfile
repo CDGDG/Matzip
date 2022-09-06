@@ -15,6 +15,7 @@ RUN apt-get install -y libmysqlclient-dev
 RUN pip3 install --upgrade pip
 RUN pip3 install --upgrade setuptools
 
-RUN pip3 install -r requirements.txt
+ADD requirements.txt /config/
+RUN pip3 install -r /config/requirements.txt
 
-WORKDIR /
+WORKDIR /src
