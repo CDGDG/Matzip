@@ -1,17 +1,20 @@
-# ./Dockerfile 
-FROM python:3
-WORKDIR /usr/src/app
+FROM ubuntu:20.04
 
-## Install packages
-COPY requirements.txt ./
-RUN pip install -r requirements.txt
+ARG DEBIAN_FRONTEND=noninteractive
 
-## Copy all src files
-COPY . .
+RUN apt-get -y update && apt-get -y dist-upgrade
+RUN apt-get install -y apt-utils dialog libpq-dev
 
-## Run the application on the port 8080
-EXPOSE 8080
+RUN apt-get install -y python3-pip python3-dev
 
-# gunicorn 배포 명령어
-# CMD ["gunicorn", "--bind", "허용하는 IP:열어줄 포트", "project.wsgi:application"]
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "config.wsgi:application"]
+RUN apt-get install -y libssl-dev
+RUN apt-get install -y mysql-server
+RUN apt-get install -y mysql-client
+RUN apt-get install -y libmysqlclient-dev
+
+RUN pip3 install --upgrade pip
+RUN pip3 install --upgrade setuptools
+
+RUN pip3 install -r requirements.txt
+
+WORKDIR /
