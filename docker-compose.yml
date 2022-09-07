@@ -4,9 +4,12 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - .:/src
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - /root/matzip/ssl:/root/matzip/ssl
+      - ./static_root/:/static
     depends_on:
       - web
 
@@ -14,9 +17,21 @@ services:
     build: .
     command: bash -c "
       python3 /src/manage.py collectstatic --no-input &&
-      python3 /src/manage.py makemigrations &&
-      python3 /src/manage.py migrate &&
-      gunicorn /src/config.wsgi:application -b 0:80"
+      gunicorn config.wsgi:application -b 0.0.0.0:8000"
+      # python3 /src/manage.py makemigrations &&
+      # python3 /src/manage.py migrate &&
     volumes:
       - .:/src
+      - /var/run/mysqld:/var/run/mysqld
       - ./config/gunicorn:/etc/systemd/system
+    ports:
+      - "8000:8000"
+    expose:
+      - "8000"
+
+  # certbot:
+  #   image: certbot/certbot
+  #   volumes:
+  #     - ./certbot/conf:/etc/letsencrypt
+  #     - ./certbot/www:/var/www/certbot
+

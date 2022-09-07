@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-*-*xo2aix-m5cmjm18+i7bm-^%a)+9tw)d_b@3=yj(-fb3#ici
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["web", "0.0.0.0", "cdg.matzip.kro.kr"]
 
 
 # Application definition
@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'matzip',
         'USER': 'root',
-        'PASSWORD': '1234',
+        'PASSWORD': 'gpdnjs1208!',
         'HOST': 'localhost',
         'PORT': '3306',
     },
